@@ -1,4 +1,4 @@
-# Introduction to GlusterFS
+![5 3  pool status](https://github.com/user-attachments/assets/d194f4a1-2ead-43a4-bf8f-54a86754b8b7)# Introduction to GlusterFS
 
 **GlusterFS is a highly scalable and distributed file system that allows you to aggregate storage resources from multiple machines into a single, unified storage pool. This means it can combine storage across multiple servers, offering a seamless storage solution for large-scale environments. GlusterFS is designed to scale horizontally, meaning you can add more nodes (servers) as needed to accommodate increasing data storage needs. This makes it an excellent choice for cloud environments, big data processing, and applications requiring high availability and redundancy.**
 
@@ -692,25 +692,164 @@ sudo ufw allow from 192.168.82.0/24 to any port 49152:49251
 
 
 
+<br>
+<br>
+
+*************** Implementation Screnshots ******************
+
+
+<br>
+<br>
+
+
+![1  etc  file](https://github.com/user-attachments/assets/4e4a537c-918f-4bbd-b8b9-3145c0474dca)
+
+
+<br>
+<br>
+
+
+![3 controller](https://github.com/user-attachments/assets/082773e8-4c78-4766-9e39-7434a6a6ea93)
+
+
+<br>
+<br>
+
+
+![3 1 compute1](https://github.com/user-attachments/assets/851dce71-b18b-4377-baff-df1c8b31a5f6)
+
+
+<br>
+<br>
+
+![3 2 compute2](https://github.com/user-attachments/assets/ba7a1b28-f5be-4e25-928f-f259de1f3c11)
 
 
 
+<br>
+<br>
+
+![output   3 ](https://github.com/user-attachments/assets/416c082d-ca62-4972-bd14-952d019778d1)
 
 
 
+<br>
+<br>
+
+![4  lsblk  controller](https://github.com/user-attachments/assets/6ffa60bf-3955-4155-a507-987a3417698e)
 
 
 
+<br>
+<br>
+
+![4  lsblk  compute1](https://github.com/user-attachments/assets/7b895bd1-97a0-4e68-8614-575601374ba8)
 
 
 
+<br>
+<br>
+
+![4  lsblk  compute2](https://github.com/user-attachments/assets/9e2a9042-4084-4f5d-86f1-57932a3b8d20)
 
 
 
+<br>
+<br>
+
+![gluster status compute1](https://github.com/user-attachments/assets/9585d659-6b60-4f74-8465-ea356e2c404d)
 
 
 
+<br>
+<br>
 
+![gluster status compute2](https://github.com/user-attachments/assets/fd6b507b-6adc-44d0-b99f-961f4fbe504e)
+
+
+
+<br>
+<br>
+
+
+![5  df -h controller](https://github.com/user-attachments/assets/821db9fa-4020-43cf-a6d5-5fdebef53713)
+
+
+
+<br>
+<br>
+
+
+![5 1  df -h compute1](https://github.com/user-attachments/assets/b6ef41c3-6083-4c01-bf61-573a93a34f7d)
+
+
+<br>
+<br>
+
+
+![5 1  df -h compute2](https://github.com/user-attachments/assets/86b832ff-824f-4407-947f-96129ac24c43)
+
+
+<br>
+<br>
+
+
+
+![5 3  pool status](https://github.com/user-attachments/assets/9768b8db-67a9-4cd4-ace9-bddfd5847f80)
+
+
+
+<br>
+<br>
+
+
+![5 4 gluster volume  heal status status](https://github.com/user-attachments/assets/1a3acbea-cd77-4639-b1b7-1f5bc75a1b20)
+
+
+<br>
+<br>
+
+
+
+![5 5 mount  status](https://github.com/user-attachments/assets/d3380c79-671b-413b-8135-1c7c11493537)
+
+<br>
+<br>
+
+![6 gluster volume](https://github.com/user-attachments/assets/81235987-4fdb-418e-a45d-4850a72d7057)
+
+
+
+<br>
+<br>
+
+
+
+![7 gluster volume status](https://github.com/user-attachments/assets/2bc06dd2-1442-48c2-b807-0ba87f0a5b47)
+
+<br>
+<br>
+
+
+![gluster status controller](https://github.com/user-attachments/assets/961151b0-db57-4079-b8fc-30771e8a898a)
+
+
+<br>
+<br>
+
+
+![final output](https://github.com/user-attachments/assets/0be163c3-7512-4578-9fb4-b4b0ca202b18)
+
+
+<br>
+<br>
+
+
+![final output 2 ](https://github.com/user-attachments/assets/2d462128-0586-4a82-9f32-ac0843ad8d90)
+
+
+<br>
+<br>
 
 
 
