@@ -98,7 +98,7 @@
 
 ### 5. Performance Optimization
 
-*GlusterFS includes several features to optimize performance in distributed environments:      
+   *GlusterFS includes several features to optimize performance in distributed environments:*    
 
    - Load Balancing: The system automatically balances data across bricks, helping to ensure that no single node becomes overwhelmed.*
 
@@ -273,7 +273,7 @@
 
 
 
-#  ********************* Implemenytation *********************
+#  ********************* Implimentation  *********************
 
 
 
@@ -373,7 +373,7 @@ lsblk
 
 
 
-#  ************  Step-by-Step Inmplementation  ****************
+#  ************  Step-by-Step Implimentation  ****************
 
 
 <br>
