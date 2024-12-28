@@ -114,7 +114,7 @@
 
    - Access Control Lists (ACLs): ACLs allow granular control over which users or systems can access specific volumes or bricks.
 
-## Conclusion
+## Key Point
 
 *GlusterFS is a powerful, scalable, and highly available distributed file system that meets the needs of large-scale environments, including cloud storage, big data analytics, and disaster recovery. With its advanced features such as geo-replication, self-healing, and strong consistency models, GlusterFS is a critical tool for businesses and organizations that require reliable and efficient storage solutions. By understanding its core components and advanced capabilities, users can make the most of GlusterFS in their environments and optimize their storage infrastructure to meet evolving demands.*
 
@@ -262,6 +262,476 @@
 - **GlusterFS** is a more powerful, scalable solution for large environments where high availability, fault tolerance, and redundancy are crucial.
 
 *If you need more advanced features like data replication, fault tolerance, scalability, and geo-replication, GlusterFS is the better choice. For simpler file sharing with less overhead, NFS is often sufficient.*
+
+
+
+
+
+<br>
+
+<br>
+
+
+
+# ******* Implemenytation *********************
+
+
+
+<br>
+
+
+
+*Before you begin the GlusterFS setup on your Ubuntu nodes (controller, compute1, compute2), ensure the following prerequisites are met. These prerequisites will ensure smooth installation and configuration:*
+
+### 1. Virtual Machines or Physical Machines (Nodes)
+
+- **Three nodes:** You need at least three nodes (VMs or physical machines) for this setup:
+      - **Controller:** This node will manage the cluster.
+      - **Compute1 and Compute2:** These nodes will participate in the GlusterFS cluster as data storage nodes.
+
+*The nodes should have access to each other over the network (i.e., they should be able to ping each other).*
+
+### 2. Ubuntu Installation
+
+   - Each node should have a clean installation of Ubuntu 20.04 LTS or Ubuntu 22.04 LTS (or any similar version).
+   - Ensure that you have a non-root user with sudo privileges on each node for running commands.
+
+### 3. Network Configuration
+
+- **Static IP addresses:** Each node must have a static IP address so that the GlusterFS cluster can reliably connect between nodes.
+  
+  *Example:*
+
+```yml
+  
+Controller: 192.168.82.244
+Compute1: 192.168.82.63
+Compute2: 192.168.82.50
+
+```
+   - Ensure that these IPs are correctly mapped to hostnames in the /etc/hosts file for easy identification.
+   - The nodes must be able to ping each other. Run ping between the nodes to ensure network connectivity is working.
+
+
+
+
+
+
+### 4. Firewall Configuration
+
+**Firewall (ufw):** If you have the Uncomplicated Firewall (ufw) enabled on any of the nodes, it should be disabled temporarily during setup:
+
+```yml
+sudo ufw disable
+```
+
+
+   - Ports for GlusterFS: Later, you will need to open specific ports in the firewall for GlusterFS. These ports include:
+
+      - TCP ports 24007, 24008, and 24009 for GlusterFS communication.
+      - TCP/UDP ports in the range 49152-49251 for GlusterFS brick communication.
+
+### 5. Additional Disk for GlusterFS Storage (Optional)
+
+*If you are using GlusterFS as a distributed storage solution, you will need at least one additional disk per node for the GlusterFS volume storage. This disk should be unformatted (or you can use an existing disk) and should be mounted to a directory where the GlusterFS volume will be created.*
+
+   - For example, you may have /dev/sdb attached to each node, and you will format it and mount it to /mnt/disk1.
+
+   - You can check for available disks on each node by running:
+
+```yml
+lsblk
+```
+
+### 6. Sufficient Resources
+- Ensure that each node has enough resources (CPU, RAM, disk space) to handle GlusterFS:
+      - Minimum RAM: 2GB per node.
+      - Minimum CPU: 1 CPU core per node.
+      - Disk Space: At least 10GB available for GlusterFS data.
+
+- GlusterFS performance depends on hardware and disk configuration, so adequate resources will ensure smoother operation.
+
+### 7. Root or Sudo Privileges
+
+- Sudo or root access on all the nodes is required to perform administrative tasks such as installing packages, configuring system files, and managing services.
+
+### 8. Internet Access
+
+- Each node will need internet access to download the necessary packages and updates (e.g., apt for installing GlusterFS).
+
+### 9. GlusterFS Version Compatibility
+
+- Make sure the GlusterFS version is compatible across all nodes. In the steps provided, we are installing GlusterFS 10, but if you are using a different version, the commands may differ slightly.
+      - To ensure compatibility, use the same GlusterFS version across all nodes.
+
+
+
+
+<br>
+
+<br>
+
+
+
+#  ************  Step-by-Step Inmplementation  ****************
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+### Step 1: Modify /etc/hosts on All Nodes
+
+- Modify the /etc/hosts file to include the IPs and hostnames of the nodes. Run this on each node (controller, compute1, compute2).
+
+- On controller, compute1, and compute2, open the /etc/hosts file and add the following lines:
+
+```yml
+sudo nano /etc/hosts
+```
+
+   - Add these entries, adjusting for the respective IPs and hostnames:
+
+```yml
+
+192.168.82.244   controller
+
+192.168.82.63    compute1
+                                       # In my case change IP  acc. to your machine
+192.168.82.50    compute2
+
+```
+
+
+### Step 2: Disable the Firewall (ufw) on All Nodes
+
+- Ubuntu uses ufw for firewall management. Disable it on all nodes for now (you can configure it later, once the setup is confirmed to work).
+
+```yml
+sudo ufw disable
+```
+
+
+
+### Step 3: Install GlusterFS on All Nodes
+   - Run these commands on all nodes (controller, compute1, and compute2):
+
+```yml
+# Update the package list
+sudo apt update
+
+# Install required dependencies
+sudo apt install -y software-properties-common
+
+# Add GlusterFS repository
+sudo add-apt-repository ppa:gluster/glusterfs-10
+
+# Update the package list again
+sudo apt update
+
+# Install GlusterFS server and client
+sudo apt install -y glusterfs-server glusterfs-client
+
+```
+
+
+
+
+
+### Step 4: Start and Enable GlusterFS Service on All Nodes
+   - Run the following commands on all nodes to start the GlusterFS service and enable it to start on boot:
+
+```yml
+
+sudo systemctl start glusterd
+
+sudo systemctl enable glusterd
+
+```
+
+### Step 5: Check Network Connectivity Between Nodes
+
+   - Make sure all nodes can communicate with each other.
+
+
+```yml
+
+# From controller, run:
+
+ping compute1
+ping compute2
+
+# From compute1, run:
+
+
+ping controller
+ping compute2
+
+# From compute2, run:
+
+
+ping controller
+ping compute1
+
+```
+
+
+
+
+   *If there are any connectivity issues, verify the network configuration and ensure the nodes are in the same subnet and can reach each other.*
+
+
+
+### Step 6: Add Peers to the GlusterFS Cluster
+
+   - Now, let's add the nodes as peers to the GlusterFS cluster. Run these commands on the controller node.
+
+```yml
+
+# Add compute1 and compute2 to the cluster
+
+sudo gluster peer probe compute1
+sudo gluster peer probe compute2
+
+```
+
+ - **Check the peer status to ensure all nodes are connected:**
+
+```yml
+sudo gluster peer status
+```
+
+
+### Step 7: Prepare the Disks for GlusterFS Volume
+
+
+*On each node, you'll need to create a directory for storing the GlusterFS volume and format the disk (/dev/sdb) if it isn't already formatted. Run these commands on controller, compute1, and compute2.*
+
+- **Create a Partition on /dev/sdb:** You need to partition the disk /dev/sdb before creating a filesystem on it. You can use fdisk or parted to create a partition.
+
+   **Using fdisk:**
+
+```yml
+sudo fdisk /dev/sdb
+```
+
+   - Type n to create a new partition.
+   - Choose the partition number (usually 1 for the first partition).
+   - Accept the default first and last sectors (or define the size if necessary).
+   - Type w to write the partition table and exit.
+
+- **Verify the Partition:** After partitioning, check that /dev/sdb1 exists:
+
+```yml
+lsblk
+```
+   *You should see /dev/sdb1 listed as a partition under /dev/sdb.*
+   
+- **Format the Partition with XFS:** Once /dev/sdb1 is created, you can format it with XFS:
+
+```yml
+sudo mkfs.xfs /dev/sdb1
+```
+
+- **Mount the Partition:** After formatting, you can mount the partition:
+
+```yml
+
+sudo mkdir /mnt/disk1
+sudo mount /dev/sdb1 /mnt/disk1
+
+```
+
+
+- **Check the Mounted Filesystem:** To confirm that the filesystem is mounted correctly:
+
+```yml
+df -h
+```
+
+   **Summary:**
+- Partition /dev/sdb using fdisk to create /dev/sdb1.
+- Format /dev/sdb1 with mkfs.xfs.
+- Mount the formatted partition to a directory, e.g., /mnt/disk1.
+   *By following these steps, you should be able to partition and format the disk correctly.*
+
+
+
+
+
+### Step 8: Create the GlusterFS Volume
+
+- *You will create the GlusterFS volume on any node (for example, the controller node). This volume will be replicated across the three nodes.*
+
+   - Run this command on the controller node to create the volume:
+
+```yml
+
+sudo gluster volume create gdisk1 replica 3 \
+compute1:/mnt/disk1/gdisk1 \
+compute2:/mnt/disk1/gdisk1 \
+controller:/mnt/disk1/gdisk1
+
+```
+
+### Step 9: Start the GlusterFS Volume
+   - Once the volume is created, start it with the following command on the controller node:
+
+```yml
+sudo gluster volume start gdisk1
+```
+
+### Step 10: Verify the GlusterFS Volume
+
+   - You can check the volume status and details with:
+
+```yml
+sudo gluster volume info gdisk1
+```
+
+
+
+### Step 11: Mount the GlusterFS Volume on the Client Node
+  - *Now, let's mount the GlusterFS volume on the controller node (this can also be done on compute1 or compute2, if you prefer).*
+
+      - Install the GlusterFS client on the controller node (if it’s not already installed):
+
+```yml
+sudo apt install -y glusterfs-client
+```
+
+   - Create a mount point directory:
+
+```yml
+sudo mkdir /mnt/gdrive
+```
+
+   - Mount the GlusterFS volume:
+
+```yml
+sudo mount -t glusterfs controller:/gdisk1 /mnt/gdrive
+```
+
+
+
+
+
+### Step 12: Test the Volume
+   *To ensure everything is working correctly, test the volume by creating a test file:*
+
+
+```yml
+
+# Create a test file in the mounted volume
+sudo touch /mnt/gdrive/suraj.txt
+
+# List the files to verify
+sudo ls -l /mnt/gdrive
+
+```
+
+   *If you see testfile in the output, then the GlusterFS volume is mounted and functioning correctly.*
+
+
+
+
+
+## Step 13: (Optional) Configure Firewall Rules
+
+*After verifying the setup, you can re-enable the firewall (ufw) and configure appropriate rules.*
+   - For example, allow GlusterFS traffic on the necessary ports:
+
+```yml
+
+sudo ufw allow from 192.168.82.0/24 to any port 24007
+sudo ufw allow from 192.168.82.0/24 to any port 24008
+sudo ufw allow from 192.168.82.0/24 to any port 49152:49251
+
+```
+
+
+
+
+
+
+
+
+<br>
+<br>
+
+
+
+
+## Summary of Commands:
+
+### Controller node:
+
+   - Modify /etc/hosts to include the IPs and hostnames of all nodes.
+   - Install GlusterFS server and client.
+   - Disable the firewall.
+   - Probe compute1 and compute2 as peers.
+   - Create and start the GlusterFS volume.
+   - Mount the volume on /mnt/gdrive.
+
+### Compute1 and Compute2 nodes:
+   - Modify /etc/hosts to include the IPs and hostnames of all nodes.
+   - Install GlusterFS server and client.
+   - Disable the firewall.
+   - Format and mount the new disk.
+   - Probe the controller and other compute node as peers.
+   - Install the GlusterFS client (if mounting the volume on these nodes).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
