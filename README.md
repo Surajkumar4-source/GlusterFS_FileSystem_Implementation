@@ -1,4 +1,4 @@
-![5 3  pool status](https://github.com/user-attachments/assets/d194f4a1-2ead-43a4-bf8f-54a86754b8b7)# Introduction to GlusterFS
+# Introduction to GlusterFS
 
 **GlusterFS is a highly scalable and distributed file system that allows you to aggregate storage resources from multiple machines into a single, unified storage pool. This means it can combine storage across multiple servers, offering a seamless storage solution for large-scale environments. GlusterFS is designed to scale horizontally, meaning you can add more nodes (servers) as needed to accommodate increasing data storage needs. This makes it an excellent choice for cloud environments, big data processing, and applications requiring high availability and redundancy.**
 
@@ -815,6 +815,12 @@ sudo ufw allow from 192.168.82.0/24 to any port 49152:49251
 
 <br>
 <br>
+
+![5 3  pool status](https://github.com/user-attachments/assets/d194f4a1-2ead-43a4-bf8f-54a86754b8b7)#
+
+<br>
+<br>
+
 
 ![6 gluster volume](https://github.com/user-attachments/assets/81235987-4fdb-418e-a45d-4850a72d7057)
 
