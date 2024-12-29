@@ -273,7 +273,7 @@
 
 
 
-#  ********************* Implimentation  *********************
+#  ********************* Implementation  *********************
 
 
 
@@ -373,7 +373,7 @@ lsblk
 
 
 
-#  ************  Step-by-Step Implimentation  ****************
+#  ************  Step-by-Step Implementation  ****************
 
 
 <br>
